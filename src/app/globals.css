@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer components {
+  .keep-content-center {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-3;
+  }
+}
