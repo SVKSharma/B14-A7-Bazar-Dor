@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ProductCard, { Product } from './ProductCard';
+import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 export default function ProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -10,8 +11,7 @@ export default function ProductsSection() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('https://api.api-store.workers.dev/api/bazardor/products');
-        const data: Product[] = await res.json();
+        const data = await fetchBazaarApi<Product[]>('/products');
         if (Array.isArray(data)) {
           setProducts(data);
         }

@@ -1,6 +1,5 @@
-import { createAuthClient } from "better-auth/react"
-export const authClient = createAuthClient({
-    baseURL: process.env.MONGODB_URL as string
-})
+import { createAuthClient } from "better-auth/react";
 
-export const { signIn, signUp, useSession } = createAuthClient()
+export const authClient = createAuthClient();
+
+export const { signIn, signUp, signOut, useSession } = authClient;

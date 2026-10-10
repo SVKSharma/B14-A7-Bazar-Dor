@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { authClient, useSession } from '@/lib/auth-client';
+import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 interface Category {
   id: string;
@@ -22,8 +24,7 @@ export default function Navbar() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch('https://api.api-store.workers.dev/api/bazardor/categories');
-        const data: Category[] = await res.json();
+        const data = await fetchBazaarApi<Category[]>('/categories');
         setCategories(data);
       } catch (error) {
         console.error('Failed to fetch categories:', error);
@@ -70,9 +71,12 @@ export default function Navbar() {
               >
                 <div className="w-8 h-8 rounded-full bg-[#008a45] text-white flex items-center justify-center font-bold overflow-hidden border border-gray-200 text-xs shadow-sm">
                   {session.user?.image ? (
-                    <img
+                    <Image
                       src={session.user.image}
                       alt={session.user?.name || 'User Profile'}
+                      width={32}
+                      height={32}
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -87,7 +91,7 @@ export default function Navbar() {
 
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[50] menu p-2 shadow-xl bg-white rounded-xl w-52 mt-2 border border-gray-100"
+                className="dropdown-content z-50 menu p-2 shadow-xl bg-white rounded-xl w-52 mt-2 border border-gray-100"
               >
                 <li>
                   <Link href="/profile" className="text-sm font-medium text-gray-700 py-2">
@@ -200,9 +204,12 @@ export default function Navbar() {
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-[#008a45] text-white flex items-center justify-center font-bold text-xs overflow-hidden">
                     {session.user?.image ? (
-                      <img
+                      <Image
                         src={session.user.image}
                         alt={session.user?.name || 'User Profile'}
+                        width={32}
+                        height={32}
+                        unoptimized
                         className="w-full h-full object-cover"
                       />
                     ) : (
