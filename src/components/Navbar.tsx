@@ -164,7 +164,7 @@ export default function Navbar() {
       </div>
 
       {/* Bottom Divider Line */}
-      <div className="w-full border-b border-gray-200/80"></div>
+      <div className="w-full border-b-2 border-gray-200"></div>
 
       {/* Mobile Dropdown Menu wrapped in keep-content-center */}
       <div
