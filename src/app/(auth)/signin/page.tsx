@@ -10,6 +10,13 @@ import { signIn } from '@/lib/auth-client';
 export default function SignInPage() {
   const router = useRouter();
 
+  const getReturnUrl = () => {
+    const callbackURL = new URLSearchParams(window.location.search).get('callbackURL');
+    return callbackURL?.startsWith('/') && !callbackURL.startsWith('//')
+      ? callbackURL
+      : '/';
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,14 +36,14 @@ export default function SignInPage() {
       const { error: signInError } = await signIn.email({
         email,
         password,
-        callbackURL: '/',
+        callbackURL: getReturnUrl(),
         rememberMe: true,
       }, {
         onRequest: () => {
           setLoading(true);
         },
         onSuccess: () => {
-          router.push('/');
+          router.push(getReturnUrl());
         },
         onError: ({ error: authError }) => {
           setError(authError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
@@ -58,7 +65,7 @@ export default function SignInPage() {
     try {
       await signIn.social({
         provider,
-        callbackURL: '/',
+        callbackURL: getReturnUrl(),
         errorCallbackURL: '/auth/error',
       });
     } catch (err) {
