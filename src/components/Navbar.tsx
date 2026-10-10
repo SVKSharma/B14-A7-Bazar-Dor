@@ -225,15 +225,15 @@ export default function Navbar() {
                 </Link>
               </div>
             ) : (
-              <div className="pb-3 border-b border-gray-100 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-[#008a45] text-white flex items-center justify-center font-bold text-xs overflow-hidden">
+              <div className="rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-3.5 shadow-sm">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-[#008a45] text-xs font-bold text-white shadow-sm">
                     {session.user?.image ? (
                       <Image
                         src={session.user.image}
                         alt={session.user?.name || 'User Profile'}
-                        width={32}
-                        height={32}
+                        width={44}
+                        height={44}
                         unoptimized
                         className="w-full h-full object-cover"
                       />
@@ -241,20 +241,23 @@ export default function Navbar() {
                       <span>{profileInitials}</span>
                     )}
                   </div>
-                  <span className="text-sm font-medium text-gray-800">
-                    {getProfileDisplayName(session.user?.name)}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {session.user?.email}
-                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-gray-900">
+                      {getProfileDisplayName(session.user?.name)}
+                    </p>
+                    <p className="mt-0.5 truncate text-xs text-gray-500">
+                      {session.user?.email}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="mt-3 grid grid-cols-2 gap-2 border-t border-emerald-100 pt-3">
                   <Link
                     href="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-xs font-semibold text-[#008a45]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2.5 text-xs font-semibold text-[#008a45] shadow-sm ring-1 ring-emerald-100 transition-colors hover:bg-emerald-50"
                   >
+                    <GoPerson aria-hidden="true" className="text-sm" />
                     আমার প্রোফাইল
                   </Link>
                   <button
@@ -262,9 +265,9 @@ export default function Navbar() {
                       setIsMobileMenuOpen(false);
                       handleSignOut();
                     }}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2.5 text-xs font-semibold text-red-600 shadow-sm ring-1 ring-red-100 transition-colors hover:bg-red-50"
                   >
-                    <TbArrowBack aria-hidden="true" />
+                    <TbArrowBack aria-hidden="true" className="text-sm" />
                     সাইন আউট
                   </button>
                 </div>
