@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard, { Product } from './ProductCard';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
+import { HomeProductsSkeleton } from './LoadingSkeletons';
 
 export default function ProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,18 +38,7 @@ export default function ProductsSection() {
     .slice(0, 6);
 
   if (loading) {
-    return (
-      <section className="w-full bg-[#f8fbf7] py-8">
-        <div className="keep-content-center space-y-8">
-          <div className="h-8 bg-gray-200/60 rounded-md w-48 animate-pulse"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200/50 rounded-2xl animate-pulse"></div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+    return <HomeProductsSkeleton />;
   }
 
   return (

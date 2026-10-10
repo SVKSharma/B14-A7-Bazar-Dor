@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ProductCard, { Product } from '@/components/ProductCard';
 import { formatBengaliNumber } from '@/lib/format-bengali-number';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
+import { CategoryPageSkeleton } from '@/components/LoadingSkeletons';
 
 type SortOption = 'default' | 'price-low' | 'price-high';
 
@@ -75,19 +76,7 @@ export default function CategoryProducts({ categorySlug }: { categorySlug: strin
   };
 
   if (loading) {
-    return (
-      <div className="w-full bg-[#f8fbf7] min-h-screen py-8">
-        <div className="keep-content-center space-y-6">
-          <div className="h-28 bg-gray-200/60 rounded-2xl animate-pulse"></div>
-          <div className="h-6 bg-gray-200/50 rounded w-40 animate-pulse"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200/50 rounded-2xl animate-pulse"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <CategoryPageSkeleton />;
   }
 
   return (

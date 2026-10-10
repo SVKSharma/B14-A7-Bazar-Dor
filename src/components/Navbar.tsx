@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link, { useLinkStatus } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { GoPerson } from 'react-icons/go';
@@ -18,10 +18,24 @@ interface Category {
   icon: string;
 }
 
+function LinkLoadingSkeleton() {
+  const { pending } = useLinkStatus();
+
+  if (!pending) return null;
+
+  return (
+    <span
+      aria-hidden="true"
+      className="skeleton-shimmer pointer-events-none absolute inset-0 z-10 rounded-md"
+    />
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const { data: session, isPending } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -31,6 +45,8 @@ export default function Navbar() {
         setCategories(data);
       } catch (error) {
         console.error('Failed to fetch categories:', error);
+      } finally {
+        setCategoriesLoading(false);
       }
     }
     fetchCategories();
@@ -73,7 +89,10 @@ export default function Navbar() {
         {/* Auth Buttons / Profile (Right) */}
         <div className="hidden md:flex items-center gap-3">
           {isPending ? (
-            <div className="w-24 h-9 bg-gray-200/60 animate-pulse rounded-lg"></div>
+            <div aria-label="অ্যাকাউন্ট লোড হচ্ছে" className="flex items-center gap-2 rounded-full border border-emerald-900/5 bg-white px-3 py-1.5">
+              <span aria-hidden="true" className="skeleton-shimmer h-8 w-8 rounded-full" />
+              <span aria-hidden="true" className="skeleton-shimmer h-4 w-20 rounded" />
+            </div>
           ) : session ? (
             <div className="dropdown dropdown-end">
               <div
@@ -167,7 +186,14 @@ export default function Navbar() {
       <div className="hidden w-full border-t border-gray-200/60 md:block">
         <div className="keep-content-center py-2.5">
           <nav className="flex items-center justify-center gap-5 overflow-x-auto no-scrollbar">
-            {categories.map((cat) => {
+            {categoriesLoading
+              ? [0, 1, 2, 3, 4].map((item) => (
+                  <div key={item} aria-hidden="true" className="flex shrink-0 items-center gap-2 rounded-md px-3 py-1.5">
+                    <span className="skeleton-shimmer h-5 w-5 rounded-full" />
+                    <span className={`skeleton-shimmer h-3 rounded ${item % 2 === 0 ? 'w-14' : 'w-20'}`} />
+                  </div>
+                ))
+              : categories.map((cat) => {
               const href = `/category/${cat.slug}`;
               const isActive = pathname === href;
 
@@ -175,7 +201,7 @@ export default function Navbar() {
                 <Link
                   key={cat.id}
                   href={href}
-                  className={`inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${
+                  className={`relative inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${
                     isActive
                       ? 'bg-[#008a45] text-white shadow-sm'
                       : 'text-gray-700 hover:bg-gray-100/80 hover:text-gray-900'
@@ -185,9 +211,10 @@ export default function Navbar() {
                     {cat.icon || '🍚'}
                   </span>
                   <span className="leading-none">{cat.nameBn}</span>
+                  <LinkLoadingSkeleton />
                 </Link>
               );
-            })}
+              })}
           </nav>
         </div>
       </div>
@@ -279,7 +306,14 @@ export default function Navbar() {
                 ক্যাটাগরি সমূহ
               </p>
               <nav className="flex flex-wrap gap-2">
-                {categories.map((cat) => {
+                {categoriesLoading
+                  ? [0, 1, 2, 3, 4, 5].map((item) => (
+                      <span key={item} aria-hidden="true" className="inline-flex items-center gap-1.5 rounded-md border border-emerald-900/5 bg-white px-2.5 py-1.5">
+                        <span className="skeleton-shimmer h-4 w-4 rounded-full" />
+                        <span className={`skeleton-shimmer h-3 rounded ${item % 2 === 0 ? 'w-10' : 'w-14'}`} />
+                      </span>
+                    ))
+                  : categories.map((cat) => {
                   const href = `/category/${cat.slug}`;
                   const isActive = pathname === href;
 
@@ -288,7 +322,7 @@ export default function Navbar() {
                       key={cat.id}
                       href={href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                    className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                         isActive
                           ? 'bg-[#008a45] text-white'
                           : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200/60'
@@ -296,9 +330,10 @@ export default function Navbar() {
                     >
                       <span className="text-sm leading-none">{cat.icon || '🍚'}</span>
                       <span className="leading-none">{cat.nameBn}</span>
+                    <LinkLoadingSkeleton />
                     </Link>
                   );
-                })}
+                  })}
               </nav>
             </div>
           </div>

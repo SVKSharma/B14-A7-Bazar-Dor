@@ -6,6 +6,7 @@ import { TbArrowBack } from 'react-icons/tb';
 import { Form, Input, Button } from '@heroui/react';
 import { authClient, useSession } from '@/lib/auth-client';
 import { capitalizeNameWords, getProfileInitials, MAX_NAME_LENGTH } from '@/lib/user-name';
+import { ProfilePageSkeleton } from '@/components/LoadingSkeletons';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -62,15 +63,7 @@ export default function ProfilePage() {
   };
 
   if (isPending) {
-    return (
-      <div className="w-full flex-1 bg-[#f8fbf7] px-4 py-6 sm:py-8">
-        <div className="keep-content-center max-w-lg space-y-5">
-          <div className="h-10 w-48 bg-gray-200/60 rounded-lg animate-pulse"></div>
-          <div className="h-32 bg-gray-200/60 rounded-2xl animate-pulse"></div>
-          <div className="h-48 bg-gray-200/60 rounded-2xl animate-pulse"></div>
-        </div>
-      </div>
-    );
+    return <ProfilePageSkeleton />;
   }
 
   const profileInitials = getProfileInitials(session?.user?.name);
