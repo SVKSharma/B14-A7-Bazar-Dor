@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ProductBreadcrumb from '@/components/ProductBreadcrumbs';
 import ProductDetailsCard from '@/components/ProductDetailsHeader';
@@ -23,6 +24,19 @@ interface ProductDetails {
     pct: number;
   };
   markets: React.ComponentProps<typeof ProductBreakdownTable>['markets'];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id);
+
+  return {
+    title: product ? `পণ্যের বিস্তারিত: ${product.nameBn}` : 'পণ্যের বিস্তারিত',
+  };
 }
 
 async function getProduct(id: string): Promise<ProductDetails | null> {
