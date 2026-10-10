@@ -6,6 +6,7 @@ import { Form, Input, Button } from '@heroui/react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { signIn, signUp } from '@/lib/auth-client';
+import { capitalizeNameWords, MAX_NAME_LENGTH } from '@/lib/user-name';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -32,9 +33,15 @@ export default function SignUpPage() {
       return;
     }
 
+    const trimmedName = capitalizeNameWords(name.trim());
+    if (!trimmedName || trimmedName.length > MAX_NAME_LENGTH) {
+      setError(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
+      return;
+    }
+
     try {
       const { error: signUpError } = await signUp.email({
-        name,
+        name: trimmedName,
         email,
         password,
         callbackURL: '/',
@@ -101,11 +108,15 @@ export default function SignUpPage() {
               required
               type="text"
               placeholder="যেমন: রহিম উদ্দিন"
+              maxLength={MAX_NAME_LENGTH}
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => setName(capitalizeNameWords(event.target.value))}
               variant="secondary"
               className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
             />
+            <p className="text-right text-[11px] text-gray-400">
+              {name.length}/{MAX_NAME_LENGTH}
+            </p>
           </div>
 
           {/* Email Field */}
