@@ -29,7 +29,7 @@ function ProductCardsSkeleton({ count = 6 }: { count?: number }) {
                 <SkeletonBlock className="h-3 w-8 rounded" />
               </div>
             </div>
-            <SkeletonBlock className="h-7 w-[4.5rem] rounded-full" />
+            <SkeletonBlock className="h-7 w-18 rounded-full" />
           </div>
         </div>
       ))}
@@ -42,22 +42,22 @@ export function HomePageSkeleton() {
     <div className="w-full flex-1 bg-[#f8fbf7]">
       <section className="w-full py-6 sm:py-8">
         <div className="keep-content-center">
-          <div className="relative flex min-h-72 flex-col items-center justify-between gap-8 overflow-hidden rounded-2xl border border-emerald-900/10 bg-white p-6 shadow-[0_20px_60px_-40px_rgba(0,80,40,0.35)] sm:p-10 md:flex-row md:p-12">
+          <div className="relative flex min-h-72 flex-col items-center justify-between gap-7 overflow-hidden rounded-2xl border border-emerald-900/10 bg-white p-5 text-center shadow-[0_20px_60px_-40px_rgba(0,80,40,0.35)] sm:gap-8 sm:p-10 md:flex-row md:p-12 md:text-left">
             <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-emerald-50/70 blur-3xl" />
-            <div className="w-full max-w-xl space-y-4">
+            <div className="relative z-10 flex w-full max-w-xl flex-col items-center space-y-4 md:flex-1 md:items-start">
               <SkeletonBlock className="h-7 w-40 rounded-lg" />
-              <div className="space-y-2">
+              <div className="flex w-full flex-col items-center space-y-2 md:items-start">
                 <SkeletonBlock className="h-8 w-4/5 rounded-lg sm:h-9" />
                 <SkeletonBlock className="h-8 w-3/5 rounded-lg sm:h-9" />
               </div>
-              <div className="space-y-2 pt-1">
+              <div className="flex w-full flex-col items-center space-y-2 pt-1 md:items-start">
                 <SkeletonBlock className="h-4 w-full rounded" />
                 <SkeletonBlock className="h-4 w-11/12 rounded" />
                 <SkeletonBlock className="h-4 w-4/5 rounded" />
               </div>
-              <SkeletonBlock className="h-11 w-36 rounded-lg" />
+              <SkeletonBlock className="h-11 w-full rounded-xl sm:w-36" />
             </div>
-            <div className="relative flex h-48 w-full max-w-72 items-center justify-center md:h-56 md:max-w-80">
+            <div className="relative flex h-40 w-full max-w-64 items-center justify-center sm:h-52 sm:max-w-80 md:h-56 md:max-w-80">
               <div className="absolute h-40 w-40 rounded-full border border-emerald-100 sm:h-48 sm:w-48" />
               <div className="absolute h-32 w-32 rounded-full border border-dashed border-emerald-200 sm:h-40 sm:w-40" />
               <SkeletonBlock className="h-28 w-28 rounded-[2rem] shadow-lg shadow-emerald-900/10 sm:h-32 sm:w-32" />
