@@ -49,6 +49,7 @@ const UNIT_MAP: Record<string, string> = {
 
 export default function PriceTicker() {
   const [tickerProducts, setTickerProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -71,10 +72,37 @@ export default function PriceTicker() {
         }
       } catch (error) {
         console.error('Failed to fetch ticker products:', error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchProducts();
   }, []);
+
+  if (loading) {
+    return (
+      <div
+        role="status"
+        aria-label="দামের তথ্য লোড হচ্ছে"
+        className="w-full overflow-hidden border-b border-gray-200/80 bg-[#f8fbf7] py-2.5 text-sm"
+      >
+        <Marquee speed={40} gradient={false} pauseOnHover={false}>
+          {Array.from({ length: 10 }, (_, item) => (
+            <div
+              key={item}
+              aria-hidden="true"
+              className="flex shrink-0 items-center gap-2 border-r border-emerald-900/10 px-6 py-0.5"
+            >
+              <span className="skeleton-shimmer h-5 w-5 rounded-full" />
+              <span className="skeleton-shimmer h-4 w-20 rounded" />
+              <span className="skeleton-shimmer h-4 w-24 rounded" />
+              <span className="skeleton-shimmer h-4 w-12 rounded-full" />
+            </div>
+          ))}
+        </Marquee>
+      </div>
+    );
+  }
 
   if (tickerProducts.length === 0) return null;
 
