@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductBreadcrumb from '@/components/ProductBreadcrumbs';
 import ProductDetailsCard from '@/components/ProductDetailsHeader';
 import ProductBreakdownTable from '@/components/ProductBreakDownTable';
+import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 interface ProductDetails {
   id: number;
@@ -26,11 +27,9 @@ interface ProductDetails {
 
 async function getProduct(id: string): Promise<ProductDetails | null> {
   try {
-    const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/products/${id}`, {
+    return await fetchBazaarApi<ProductDetails>(`/products/${encodeURIComponent(id)}`, {
       cache: 'no-store',
     });
-    if (!res.ok) return null;
-    return await res.json();
   } catch (error) {
     console.error('Failed to fetch product:', error);
     return null;

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Marquee from 'react-fast-marquee';
+import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 interface Market {
   market: string;
@@ -52,8 +53,7 @@ export default function PriceTicker() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('https://api.api-store.workers.dev/api/bazardor/products');
-        const data: Product[] = await res.json();
+        const data = await fetchBazaarApi<Product[]>('/products');
 
         if (Array.isArray(data)) {
           const risers = data

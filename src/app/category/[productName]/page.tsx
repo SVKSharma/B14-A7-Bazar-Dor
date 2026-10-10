@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, use } from 'react';
 import ProductCard, { Product } from '@/components/ProductCard';
 import { formatBengaliNumber } from '@/lib/format-bengali-number';
+import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 type SortOption = 'default' | 'price-low' | 'price-high';
 
@@ -20,10 +21,9 @@ export default function CategoryPage({ params }: { params: Promise<{ productName
     async function fetchCategoryProducts() {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://api.api-store.workers.dev/api/bazardor/products?category=${categorySlug}`
+        const data = await fetchBazaarApi<Product[]>(
+          `/products?category=${encodeURIComponent(categorySlug)}`
         );
-        const data: Product[] = await res.json();
         if (Array.isArray(data)) {
           setProducts(data);
         }
