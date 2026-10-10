@@ -1,4 +1,9 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'লগইন সমস্যা',
+};
 
 interface AuthErrorPageProps {
   searchParams: Promise<{ error?: string }>;

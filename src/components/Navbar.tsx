@@ -10,6 +10,7 @@ import { TbArrowBack } from 'react-icons/tb';
 import { authClient, useSession } from '@/lib/auth-client';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
 import { getProfileDisplayName, getProfileInitials } from '@/lib/user-name';
+import BrandTrolleyIcon from './BrandTrolleyIcon';
 
 interface Category {
   id: string;
@@ -73,8 +74,8 @@ export default function Navbar() {
       <div className="keep-content-center flex items-center justify-between py-3.5">
         {/* Brand Logo & Date (Left) */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 bg-[#008a45] rounded-xl flex items-center justify-center text-white text-xl shadow-sm shrink-0">
-            🛒
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#008a45] text-xl text-white shadow-sm">
+            <BrandTrolleyIcon className="h-6 w-6" />
           </div>
           <div>
             <h1 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">
