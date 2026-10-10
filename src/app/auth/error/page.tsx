@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import SocialAuthIntentCleanup from '@/components/auth/SocialAuthIntentCleanup';
 
 export const metadata: Metadata = {
   title: 'লগইন সমস্যা',
@@ -22,6 +23,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
 
   return (
     <div className="flex w-full flex-1 items-center justify-center bg-[#f8fbf7] px-4 py-8">
+      <SocialAuthIntentCleanup />
       <section className="w-full max-w-md rounded-2xl border border-gray-200/80 bg-white p-6 text-center shadow-sm sm:p-8">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50 text-xl text-amber-600">
           !

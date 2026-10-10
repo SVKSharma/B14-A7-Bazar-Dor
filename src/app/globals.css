@@ -1,6 +1,36 @@
 @import "tailwindcss";
 @plugin "daisyui";
-@import "@heroui/styles"; 
+@import "@heroui/styles";
+
+:root {
+  --font-ag-bangla: "Ag Bangla", "Noto Sans Bengali", "Hind Siliguri", sans-serif;
+}
+
+html,
+body {
+  font-family: var(--font-ag-bangla);
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-ag-bangla);
+}
 
 @layer components {
   .keep-content-center {

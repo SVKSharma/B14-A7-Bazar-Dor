@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { GoPerson } from 'react-icons/go';
 import { TbArrowBack } from 'react-icons/tb';
-import { authClient, useSession } from '@/lib/auth-client';
+import { authClient, consumeSocialAuthIntent, useSession } from '@/lib/auth-client';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
 import { getProfileDisplayName, getProfileInitials } from '@/lib/user-name';
 import BrandTrolleyIcon from '@/components/ui/BrandTrolleyIcon';
@@ -40,6 +40,17 @@ export default function Navbar() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isPending || !session) return;
+
+    const intent = consumeSocialAuthIntent();
+    if (intent === 'signin') {
+      toast.success('সাইন ইন সফল হয়েছে!', { id: 'social-signin-success' });
+    } else if (intent === 'signup') {
+      toast.success('সাইন আপ সফল হয়েছে!', { id: 'social-signup-success' });
+    }
+  }, [isPending, session]);
 
   useEffect(() => {
     async function fetchCategories() {

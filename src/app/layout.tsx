@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import PriceTicker from "@/components/layout/PriceTicker";
@@ -37,14 +37,10 @@ function NavigationLoading() {
   );
 }
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const agBangla = Noto_Sans_Bengali({
+  variable: "--font-ag-bangla",
+  subsets: ["bengali"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -59,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="bn"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${agBangla.variable} h-full antialiased`}
       data-theme="light"
     >
       <body className="min-h-full flex flex-col">
