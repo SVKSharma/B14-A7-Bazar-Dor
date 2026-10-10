@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import bazarHeroImage from '@/assets/bazar-hero.png'; 
+import CurrentBanglaDate from './CurrentBanglaDate';
 
 export default function Hero() {
   const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -23,7 +24,7 @@ export default function Hero() {
           {/* Left Text Content */}
           <div className="relative z-10 flex w-full max-w-xl flex-col items-center md:flex-1 md:items-start">
             <div className="mb-4 inline-flex items-center rounded-full border border-emerald-900/5 bg-[#eef5eb] px-3.5 py-1.5 text-xs font-semibold tracking-wide text-[#008a45] sm:text-sm">
-              শনিবার, ১০ অক্টোবর, ২০২৬
+              <CurrentBanglaDate />
             </div>
 
             <h1 className="mb-3 max-w-xl text-2xl font-bold leading-[1.4] tracking-tight text-gray-900 sm:mb-4 sm:text-3xl md:text-4xl">

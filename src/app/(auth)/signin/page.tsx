@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button } from '@heroui/react';
+import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { signIn } from '@/lib/auth-client';
@@ -23,12 +24,17 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const showError = (message: string) => {
+    setError(message);
+    toast.error('সাইন ইন সফল হয়নি!', { id: 'signin-error' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (password.length < 8) {
-      setError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
+      showError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
       return;
     }
 
@@ -43,19 +49,20 @@ export default function SignInPage() {
           setLoading(true);
         },
         onSuccess: () => {
+          toast.success('সাইন ইন সফল হয়েছে!', { id: 'signin-success' });
           router.push(getReturnUrl());
         },
         onError: ({ error: authError }) => {
-          setError(authError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
+          showError(authError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
         },
       });
 
       if (signInError) {
-        setError(signInError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
+        showError(signInError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
       }
     } catch (err: unknown) {
       console.error('Email sign in failed:', err);
-      setError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
+      showError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
@@ -68,8 +75,10 @@ export default function SignInPage() {
         callbackURL: getReturnUrl(),
         errorCallbackURL: '/auth/error',
       });
+      toast.success('সাইন ইন শুরু হচ্ছে...', { id: `${provider}-signin` });
     } catch (err) {
       console.error(`${provider} sign in failed`, err);
+      toast.error('সাইন ইন সফল হয়নি!', { id: `${provider}-signin-error` });
     }
   };
 

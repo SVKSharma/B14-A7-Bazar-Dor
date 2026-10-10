@@ -33,6 +33,38 @@
   animation: skeleton-sheen 2.4s ease-in-out infinite;
 }
 
+.navbar-toast-viewport {
+  left: 50% !important;
+  right: auto !important;
+  top: 17px !important;
+  width: min(calc(100vw - 2rem), 420px);
+  transform: translateX(-50%);
+  z-index: 70 !important;
+}
+
+.navbar-toast-viewport > div {
+  width: 100%;
+  justify-content: center;
+}
+
+.magic-lamp-toast {
+  max-width: 100%;
+  min-height: 0 !important;
+  border-radius: 999px !important;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  animation: magic-lamp-bounce 720ms cubic-bezier(0.18, 0.92, 0.32, 1.18) both;
+}
+
+.magic-lamp-toast > div {
+  min-width: 0;
+}
+
+.magic-lamp-toast [role="status"] {
+  overflow-wrap: anywhere;
+}
+
 @keyframes skeleton-breathe {
   0%,
   100% {
@@ -55,12 +87,40 @@
   }
 }
 
+@keyframes magic-lamp-bounce {
+  0% {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(-18px) scaleX(0.42) scaleY(1.42);
+    transform-origin: 50% 0;
+  }
+  42% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(6px) scaleX(1.12) scaleY(0.88);
+  }
+  62% {
+    transform: translateY(-4px) scaleX(0.96) scaleY(1.04);
+  }
+  78% {
+    transform: translateY(2px) scaleX(1.03) scaleY(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer {
     animation: none;
   }
 
   .skeleton-shimmer::after {
+    animation: none;
+  }
+
+  .magic-lamp-toast {
     animation: none;
   }
 }

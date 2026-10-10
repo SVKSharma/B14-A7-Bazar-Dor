@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button } from '@heroui/react';
+import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { signIn, signUp } from '@/lib/auth-client';
@@ -19,23 +20,28 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const showError = (message: string) => {
+    setError(message);
+    toast.error('সাইন আপ সফল হয়নি!', { id: 'signup-error' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('পাসওয়ার্ড মিলছে না!');
+      showError('পাসওয়ার্ড মিলছে না!');
       return;
     }
 
     if (password.length < 8) {
-      setError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
+      showError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
       return;
     }
 
     const trimmedName = capitalizeNameWords(name.trim());
     if (!trimmedName || trimmedName.length > MAX_NAME_LENGTH) {
-      setError(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
+      showError(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
       return;
     }
 
@@ -50,19 +56,20 @@ export default function SignUpPage() {
           setLoading(true);
         },
         onSuccess: () => {
+          toast.success('সাইন আপ সফল হয়েছে!', { id: 'signup-success' });
           router.push('/');
         },
         onError: ({ error: authError }) => {
-          setError(authError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+          showError(authError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
         },
       });
 
       if (signUpError) {
-        setError(signUpError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+        showError(signUpError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
       }
     } catch (err: unknown) {
       console.error('Email sign up failed:', err);
-      setError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
+      showError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
@@ -75,8 +82,10 @@ export default function SignUpPage() {
         callbackURL: '/',
         errorCallbackURL: '/auth/error',
       });
+      toast.success('সাইন আপ শুরু হচ্ছে...', { id: `${provider}-signup` });
     } catch (err) {
       console.error(`${provider} sign up failed`, err);
+      toast.error('সাইন আপ সফল হয়নি!', { id: `${provider}-signup-error` });
     }
   };
 

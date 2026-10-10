@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import PriceTicker from "@/components/PriceTicker";
 import Footer from "@/components/Footer";
 import BrandTrolleyIcon from "@/components/BrandTrolleyIcon";
+import AppToaster from "@/components/AppToaster";
 
 function NavigationLoading() {
   return (
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={<NavigationLoading />}>
           <Navbar />
         </Suspense>
+        <AppToaster />
         <PriceTicker></PriceTicker>
         <main className="flex flex-1 flex-col">{children}</main>
         <Footer></Footer>
