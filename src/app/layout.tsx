@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Navbar></Navbar>
         <PriceTicker></PriceTicker>
-        <main className="flex-1">{children}</main>
+        <main className="flex flex-1 flex-col">{children}</main>
         <Footer></Footer>
       </body>
     </html>
