@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button } from '@heroui/react';
+import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import PasswordRequirements from '@/components/auth/PasswordRequirements';
 import { signIn } from '@/lib/auth-client';
+import { isPasswordStrong, PASSWORD_POLICY } from '@/lib/password-policy';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -23,12 +26,19 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const showError = (message: string) => {
+    setError(message);
+    toast.error('সাইন ইন সফল হয়নি!', { id: 'signin-error' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (password.length < 8) {
-      setError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
+    if (!isPasswordStrong(password)) {
+      showError(
+        `পাসওয়ার্ডে কমপক্ষে ${PASSWORD_POLICY.minLength} অক্ষর, ${PASSWORD_POLICY.minDigits}টি সংখ্যা এবং ${PASSWORD_POLICY.minSymbols}টি বিশেষ চিহ্ন থাকতে হবে!`,
+      );
       return;
     }
 
@@ -43,19 +53,20 @@ export default function SignInPage() {
           setLoading(true);
         },
         onSuccess: () => {
+          toast.success('সাইন ইন সফল হয়েছে!', { id: 'signin-success' });
           router.push(getReturnUrl());
         },
         onError: ({ error: authError }) => {
-          setError(authError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
+          showError(authError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
         },
       });
 
       if (signInError) {
-        setError(signInError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
+        showError(signInError.message || 'সাইন ইন ব্যর্থ হয়েছে। তথ্যগুলো আবার পরীক্ষা করুন।');
       }
     } catch (err: unknown) {
       console.error('Email sign in failed:', err);
-      setError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
+      showError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
@@ -68,8 +79,10 @@ export default function SignInPage() {
         callbackURL: getReturnUrl(),
         errorCallbackURL: '/auth/error',
       });
+      toast.success('সাইন ইন সফল হয়েছে', { id: `${provider}-signin` });
     } catch (err) {
       console.error(`${provider} sign in failed`, err);
+      toast.error('সাইন ইন সফল হয়নি!', { id: `${provider}-signin-error` });
     }
   };
 
@@ -114,18 +127,20 @@ export default function SignInPage() {
             <Input
               required
               type="password"
-              placeholder="কমপক্ষে ৮ অক্ষর"
+              minLength={PASSWORD_POLICY.minLength}
+              placeholder="৮+ অক্ষর, ১ সংখ্যা, ১ চিহ্ন"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               variant="secondary"
               className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
             />
+            <PasswordRequirements password={password} />
           </div>
 
           {/* Submit Button */}
           <Button
             type="submit"
-            isDisabled={loading}
+            isDisabled={loading || !isPasswordStrong(password)}
             className="w-full rounded-xl bg-[#008a45] hover:bg-[#007339] text-white font-semibold h-11 mt-1 transition-all shadow-sm"
           >
             {loading ? 'সাইন ইন হচ্ছে…' : 'সাইন ইন'}

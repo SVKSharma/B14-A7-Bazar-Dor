@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard, { Product } from './ProductCard';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
-import { HomeProductsSkeleton } from './LoadingSkeletons';
+import { HomeProductsSkeleton } from '@/components/ui/LoadingSkeletons';
 
 export default function ProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);

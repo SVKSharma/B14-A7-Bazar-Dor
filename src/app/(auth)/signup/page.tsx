@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button } from '@heroui/react';
+import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import PasswordRequirements from '@/components/auth/PasswordRequirements';
 import { signIn, signUp } from '@/lib/auth-client';
+import { isPasswordStrong, PASSWORD_POLICY } from '@/lib/password-policy';
 import { capitalizeNameWords, MAX_NAME_LENGTH } from '@/lib/user-name';
 
 export default function SignUpPage() {
@@ -19,23 +22,37 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const showError = (message: string) => {
+    setError(message);
+    toast.error('সাইন আপ সফল হয়নি!', { id: 'signup-error' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('পাসওয়ার্ড মিলছে না!');
+      showError('পাসওয়ার্ড মিলছে না!');
       return;
     }
 
     if (password.length < 8) {
-      setError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে!');
+      showError(
+        `পাসওয়ার্ডে কমপক্ষে ${PASSWORD_POLICY.minLength} অক্ষর, ${PASSWORD_POLICY.minDigits}টি সংখ্যা এবং ${PASSWORD_POLICY.minSymbols}টি বিশেষ চিহ্ন থাকতে হবে!`,
+      );
+      return;
+    }
+
+    if (!isPasswordStrong(password)) {
+      showError(
+        `পাসওয়ার্ডে কমপক্ষে ${PASSWORD_POLICY.minLength} অক্ষর, ${PASSWORD_POLICY.minDigits}টি সংখ্যা এবং ${PASSWORD_POLICY.minSymbols}টি বিশেষ চিহ্ন থাকতে হবে!`,
+      );
       return;
     }
 
     const trimmedName = capitalizeNameWords(name.trim());
     if (!trimmedName || trimmedName.length > MAX_NAME_LENGTH) {
-      setError(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
+      showError(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
       return;
     }
 
@@ -50,19 +67,20 @@ export default function SignUpPage() {
           setLoading(true);
         },
         onSuccess: () => {
+          toast.success('সাইন আপ সফল হয়েছে!', { id: 'signup-success' });
           router.push('/');
         },
         onError: ({ error: authError }) => {
-          setError(authError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+          showError(authError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
         },
       });
 
       if (signUpError) {
-        setError(signUpError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+        showError(signUpError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
       }
     } catch (err: unknown) {
       console.error('Email sign up failed:', err);
-      setError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
+      showError('একটি সমস্যা দেখা দিয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
@@ -75,8 +93,10 @@ export default function SignUpPage() {
         callbackURL: '/',
         errorCallbackURL: '/auth/error',
       });
+      toast.success('সাইন আপ সফল হয়েছে!', { id: `${provider}-signup` });
     } catch (err) {
       console.error(`${provider} sign up failed`, err);
+      toast.error('সাইন আপ সফল হয়নি!', { id: `${provider}-signup-error` });
     }
   };
 
@@ -139,12 +159,14 @@ export default function SignUpPage() {
             <Input
               required
               type="password"
-              placeholder="কমপক্ষে ৮ অক্ষর"
+              minLength={PASSWORD_POLICY.minLength}
+              placeholder="৮+ অক্ষর, ১ সংখ্যা, ১ চিহ্ন"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               variant="secondary"
               className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
             />
+            <PasswordRequirements password={password} />
           </div>
 
           {/* Confirm Password Field */}
@@ -153,18 +175,24 @@ export default function SignUpPage() {
             <Input
               required
               type="password"
+              minLength={PASSWORD_POLICY.minLength}
               placeholder="আবার লিখুন"
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
               variant="secondary"
               className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
             />
+            {confirmPassword && password !== confirmPassword && (
+              <p className="text-[11px] font-medium text-red-500">
+                পাসওয়ার্ড দুটি এক নয়।
+              </p>
+            )}
           </div>
 
           {/* Submit Button */}
           <Button
             type="submit"
-            isDisabled={loading}
+            isDisabled={loading || !isPasswordStrong(password) || password !== confirmPassword}
             className="w-full rounded-xl bg-[#008a45] hover:bg-[#007339] text-white font-semibold h-11 mt-1 transition-all shadow-sm"
           >
             {loading ? 'অ্যাকাউন্ট তৈরি হচ্ছে…' : 'অ্যাকাউন্ট তৈরি করুন'}

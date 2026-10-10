@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import { TbArrowBack } from 'react-icons/tb';
 import { Form, Input, Button } from '@heroui/react';
 import { authClient, useSession } from '@/lib/auth-client';
 import { capitalizeNameWords, getProfileInitials, MAX_NAME_LENGTH } from '@/lib/user-name';
-import { ProfilePageSkeleton } from '@/components/LoadingSkeletons';
+import { ProfilePageSkeleton } from '@/components/ui/LoadingSkeletons';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -14,7 +15,6 @@ export default function ProfilePage() {
 
   const [name, setName] = useState<string | null>(null);
   const [updating, setUpdating] = useState(false);
-  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
 
   const profileName = capitalizeNameWords(name ?? session?.user?.name ?? '');
 
@@ -23,22 +23,24 @@ export default function ProfilePage() {
       const { error } = await authClient.signOut();
       if (error) {
         console.error('Failed to sign out:', error);
+        toast.error('সাইন আউট সফল হয়নি!', { id: 'signout-error' });
         return;
       }
+      toast.success('সাইন আউট সফল হয়েছে!', { id: 'signout-success' });
       router.push('/signin');
       router.refresh();
     } catch (error) {
       console.error('Failed to sign out:', error);
+      toast.error('সাইন আউট সফল হয়নি!', { id: 'signout-error' });
     }
   };
 
   const handleUpdateName = async (e: React.FormEvent) => {
     e.preventDefault();
-    setUpdateMessage(null);
 
     const trimmedName = capitalizeNameWords(profileName.trim());
     if (!trimmedName || trimmedName.length > MAX_NAME_LENGTH) {
-      setUpdateMessage(`নাম সর্বোচ্চ ${MAX_NAME_LENGTH} অক্ষরের হতে হবে।`);
+      toast.error('প্রোফাইল আপডেট সফল হয়নি!', { id: 'profile-update-error' });
       return;
     }
 
@@ -50,13 +52,13 @@ export default function ProfilePage() {
       });
 
       if (error) {
-        setUpdateMessage('নাম আপডেট করতে সমস্যা হয়েছে।');
+        toast.error('প্রোফাইল আপডেট সফল হয়নি!', { id: 'profile-update-error' });
       } else {
-        setUpdateMessage('নাম সফলভাবে আপডেট করা হয়েছে!');
+        toast.success('প্রোফাইল আপডেট সফল হয়েছে!', { id: 'profile-update-success' });
       }
     } catch (error) {
       console.error('Failed to update profile name:', error);
-      setUpdateMessage('একটি সমস্যা দেখা দিয়েছে।');
+      toast.error('প্রোফাইল আপডেট সফল হয়নি!', { id: 'profile-update-error' });
     } finally {
       setUpdating(false);
     }
@@ -121,18 +123,6 @@ export default function ProfilePage() {
 
           <div className="space-y-4 pt-5">
             <h3 className="text-base font-bold text-gray-900">তথ্য</h3>
-
-            {updateMessage && (
-              <div
-                className={`rounded-xl border p-2.5 text-xs ${
-                  updateMessage.includes('সফলভাবে')
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                    : 'border-red-200 bg-red-50 text-red-600'
-                }`}
-              >
-                {updateMessage}
-              </div>
-            )}
 
             <Form onSubmit={handleUpdateName} className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">

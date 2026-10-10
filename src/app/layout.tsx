@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import PriceTicker from "@/components/PriceTicker";
-import Footer from "@/components/Footer";
-import BrandTrolleyIcon from "@/components/BrandTrolleyIcon";
+import Navbar from "@/components/layout/Navbar";
+import PriceTicker from "@/components/layout/PriceTicker";
+import Footer from "@/components/layout/Footer";
+import BrandTrolleyIcon from "@/components/ui/BrandTrolleyIcon";
+import AppToaster from "@/components/feedback/AppToaster";
 
 function NavigationLoading() {
   return (
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={<NavigationLoading />}>
           <Navbar />
         </Suspense>
+        <AppToaster />
         <PriceTicker></PriceTicker>
         <main className="flex flex-1 flex-col">{children}</main>
         <Footer></Footer>

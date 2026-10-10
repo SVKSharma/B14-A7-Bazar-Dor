@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link, { useLinkStatus } from 'next/link';
 import { usePathname } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { GoPerson } from 'react-icons/go';
 import { TbArrowBack } from 'react-icons/tb';
 import { authClient, useSession } from '@/lib/auth-client';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
 import { getProfileDisplayName, getProfileInitials } from '@/lib/user-name';
-import BrandTrolleyIcon from './BrandTrolleyIcon';
+import BrandTrolleyIcon from '@/components/ui/BrandTrolleyIcon';
+import CurrentBanglaDate from '@/components/ui/CurrentBanglaDate';
 
 interface Category {
   id: string;
@@ -58,11 +60,16 @@ export default function Navbar() {
       const { error } = await authClient.signOut();
       if (error) {
         console.error('Failed to sign out:', error);
+        toast.error('সাইন আউট সফল হয়নি!', { id: 'signout-error' });
         return;
       }
-      window.location.reload();
+      toast.success('সাইন আউট সফল হয়েছে!', { id: 'signout-success' });
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 850);
     } catch (error) {
       console.error('Failed to sign out:', error);
+      toast.error('সাইন আউট সফল হয়নি!', { id: 'signout-error' });
     }
   };
 
@@ -81,9 +88,7 @@ export default function Navbar() {
             <h1 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">
               বাজার দর
             </h1>
-            <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-              শনিবার, ১০ অক্টোবর, ২০২৬
-            </p>
+            <CurrentBanglaDate className="mt-0.5 block text-[11px] text-gray-500 sm:text-xs" />
           </div>
         </Link>
 
@@ -157,7 +162,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/signin"
-                className="text-sm font-semibold text-gray-800 hover:text-[#008a45] transition-colors px-2 py-1.5"
+                className="px-2 py-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-[#008a45]"
               >
                 সাইন ইন
               </Link>
