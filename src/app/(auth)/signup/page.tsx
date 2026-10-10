@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import PasswordRequirements from '@/components/auth/PasswordRequirements';
-import { signIn, signUp } from '@/lib/auth-client';
+import { clearSocialAuthIntent, setSocialAuthIntent, signIn, signUp } from '@/lib/auth-client';
 import { isPasswordStrong, PASSWORD_POLICY } from '@/lib/password-policy';
 import { capitalizeNameWords, MAX_NAME_LENGTH } from '@/lib/user-name';
 
@@ -87,14 +87,16 @@ export default function SignUpPage() {
   };
 
   const handleSocialSignUp = async (provider: 'google' | 'github') => {
+    setSocialAuthIntent('signup');
+
     try {
       await signIn.social({
         provider,
         callbackURL: '/',
         errorCallbackURL: '/auth/error',
       });
-      toast.success('সাইন আপ সফল হয়েছে!', { id: `${provider}-signup` });
     } catch (err) {
+      clearSocialAuthIntent();
       console.error(`${provider} sign up failed`, err);
       toast.error('সাইন আপ সফল হয়নি!', { id: `${provider}-signup-error` });
     }
