@@ -39,7 +39,7 @@ export default function Navbar() {
   const firstLetter = session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U';
 
   return (
-    <header className="w-full bg-[#f8fbf7]">
+    <header className="sticky top-0 z-40 w-full bg-[#f8fbf7]">
       {/* Top Header Row wrapped in keep-content-center */}
       <div className="keep-content-center flex items-center justify-between py-3.5">
         {/* Brand Logo & Date (Left) */}
