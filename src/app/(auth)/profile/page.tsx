@@ -7,7 +7,7 @@ import { TbArrowBack } from 'react-icons/tb';
 import { Form, Input, Button } from '@heroui/react';
 import { authClient, useSession } from '@/lib/auth-client';
 import { capitalizeNameWords, getProfileInitials, MAX_NAME_LENGTH } from '@/lib/user-name';
-import { ProfilePageSkeleton } from '@/components/LoadingSkeletons';
+import { ProfilePageSkeleton } from '@/components/ui/LoadingSkeletons';
 
 export default function ProfilePage() {
   const router = useRouter();

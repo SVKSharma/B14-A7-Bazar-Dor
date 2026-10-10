@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import bazarHeroImage from '@/assets/bazar-hero.png'; 
-import CurrentBanglaDate from './CurrentBanglaDate';
+import CurrentBanglaDate from '@/components/ui/CurrentBanglaDate';
 
 export default function Hero() {
   const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>) => {

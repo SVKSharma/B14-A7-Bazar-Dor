@@ -1,5 +1,5 @@
-import Hero from "@/components/Hero";
-import ProductsSection from "@/components/ProductsSelection";
+import Hero from "@/components/layout/Hero";
+import ProductsSection from "@/components/products/ProductsSelection";
 
 export default function Home() {
   return (

@@ -1,9 +1,9 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import ProductBreadcrumb from '@/components/ProductBreadcrumbs';
-import ProductDetailsCard from '@/components/ProductDetailsHeader';
-import ProductBreakdownTable from '@/components/ProductBreakDownTable';
+import ProductBreadcrumb from '@/components/products/ProductBreadcrumbs';
+import ProductDetailsCard from '@/components/products/ProductDetailsHeader';
+import ProductBreakdownTable from '@/components/products/ProductBreakDownTable';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
 
 interface ProductDetails {

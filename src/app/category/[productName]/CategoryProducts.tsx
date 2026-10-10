@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import ProductCard, { Product } from '@/components/ProductCard';
+import ProductCard, { Product } from '@/components/products/ProductCard';
 import { formatBengaliNumber } from '@/lib/format-bengali-number';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
-import { CategoryPageSkeleton } from '@/components/LoadingSkeletons';
+import { CategoryPageSkeleton } from '@/components/ui/LoadingSkeletons';
 
 type SortOption = 'default' | 'price-low' | 'price-high';
 

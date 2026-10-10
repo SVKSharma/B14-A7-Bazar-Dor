@@ -11,8 +11,8 @@ import { TbArrowBack } from 'react-icons/tb';
 import { authClient, useSession } from '@/lib/auth-client';
 import { fetchBazaarApi } from '@/lib/bazaar-api';
 import { getProfileDisplayName, getProfileInitials } from '@/lib/user-name';
-import BrandTrolleyIcon from './BrandTrolleyIcon';
-import CurrentBanglaDate from './CurrentBanglaDate';
+import BrandTrolleyIcon from '@/components/ui/BrandTrolleyIcon';
+import CurrentBanglaDate from '@/components/ui/CurrentBanglaDate';
 
 interface Category {
   id: string;
@@ -162,7 +162,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/signin"
-                className="text-sm font-semibold text-gray-800 hover:text-[#008a45] transition-colors px-2 py-1.5"
+                className="px-2 py-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-[#008a45]"
               >
                 সাইন ইন
               </Link>
