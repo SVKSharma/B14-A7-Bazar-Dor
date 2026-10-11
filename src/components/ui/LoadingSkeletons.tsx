@@ -168,20 +168,20 @@ export function ProductPageSkeleton() {
 
 export function ProfilePageSkeleton() {
   return (
-    <div className="w-full flex-1 bg-[#f8fbf7] px-4 py-6 sm:py-8">
+    <div className="w-full flex-1 bg-[#f8fbf7] py-6 sm:py-8">
       <div className="keep-content-center max-w-lg space-y-5">
         <div className="space-y-2 text-center">
           <SkeletonBlock className="mx-auto h-8 w-48 rounded" />
           <SkeletonBlock className="mx-auto h-4 w-56 max-w-full rounded" />
         </div>
-        <div className="space-y-5 rounded-2xl border border-emerald-900/10 bg-white p-6 shadow-[0_8px_24px_-20px_rgba(0,80,40,0.3)] sm:p-8">
-          <div className="flex items-center gap-3 border-b border-gray-100 pb-5">
+        <div className="space-y-5 rounded-2xl border border-emerald-900/10 bg-white p-4 shadow-[0_8px_24px_-20px_rgba(0,80,40,0.3)] sm:p-8">
+          <div className="flex flex-col gap-3 border-b border-gray-100 pb-5 sm:flex-row sm:items-center sm:gap-3">
             <SkeletonBlock className="h-14 w-14 shrink-0 rounded-2xl" />
-            <div className="flex-1 space-y-2">
+            <div className="min-w-0 flex-1 space-y-2">
               <SkeletonBlock className="h-5 w-32 rounded" />
               <SkeletonBlock className="h-4 w-48 max-w-full rounded" />
             </div>
-            <SkeletonBlock className="h-10 w-24 rounded-xl" />
+            <SkeletonBlock className="h-10 w-24 self-end rounded-xl sm:self-auto" />
           </div>
           <SkeletonBlock className="h-5 w-20 rounded" />
           <SkeletonBlock className="h-11 rounded-xl" />

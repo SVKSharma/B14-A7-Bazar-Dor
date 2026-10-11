@@ -71,8 +71,12 @@ export default function ProfilePage() {
   const profileInitials = getProfileInitials(session?.user?.name);
 
   return (
-    <div className="w-full flex-1 bg-[#f8fbf7] px-4 py-6 sm:py-8">
-      <div className="keep-content-center max-w-lg space-y-5">
+    <div className="relative w-full flex-1 overflow-hidden bg-[#f8fbf7] py-6 sm:py-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-emerald-100/70 blur-3xl" />
+        <div className="absolute -bottom-28 -left-16 h-72 w-72 rounded-full bg-lime-100/70 blur-3xl" />
+      </div>
+      <div className="keep-content-center relative max-w-lg space-y-5">
         {/* Keep the profile heading compact, like the auth forms. */}
         <div className="text-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
@@ -84,8 +88,8 @@ export default function ProfilePage() {
         </div>
 
         {/* Keep account details and profile editing within one compact card. */}
-        <div className="w-full rounded-2xl border border-gray-200/80 bg-white p-6 shadow-sm sm:p-8">
-          <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-5">
+        <div className="w-full rounded-2xl border border-gray-200/80 bg-white/95 p-4 shadow-sm backdrop-blur sm:p-8">
+          <div className="flex flex-col gap-3 border-b border-gray-100 pb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#008a45] text-2xl font-bold text-white shadow-sm">
                 {session?.user?.image ? (
@@ -101,8 +105,11 @@ export default function ProfilePage() {
                   <span>{profileInitials}</span>
                 )}
               </div>
-              <div className="min-w-0">
-                <h2 className="wrap-break-word text-base font-bold leading-tight text-gray-900 sm:text-lg">
+              <div className="min-w-0 flex-1">
+                <h2
+                  title={capitalizeNameWords(session?.user?.name || 'ইউজার')}
+                  className="truncate whitespace-nowrap text-base font-bold leading-tight text-gray-900 sm:text-lg"
+                >
                   {capitalizeNameWords(session?.user?.name || 'ইউজার')}
                 </h2>
                 <p className="mt-0.5 truncate text-xs text-gray-500">
@@ -114,7 +121,7 @@ export default function ProfilePage() {
             <Button
               type="button"
               onClick={handleSignOut}
-              className="flex shrink-0 items-center gap-1.5 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+              className="flex shrink-0 items-center gap-1.5 self-end rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 sm:self-auto"
             >
               <TbArrowBack aria-hidden="true" />
               <span>সাইন আউট</span>
