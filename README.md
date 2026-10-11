@@ -23,6 +23,10 @@ BazarDor is a modern, responsive Bengali market price tracking application built
 
 <h2 style="font-size: 1.5rem; font-weight: 800;"><font color="#008a45">🌟 Key Features</font></h2>
 
+<p style="font-size: 1.2rem; font-weight: 700; color: #b45309; border: 2px solid #f59e0b; border-radius: 12px; background: #fffbeb; padding: 16px;">
+  ⚠️ <strong>One email address can be used with only one sign-in method.</strong> If you sign up with an email using Google, GitHub, or a password, you must continue signing in with that same method. You cannot use another method with the same email address, and accounts are not automatically linked. To use a different sign-in method, register with a separate email address.
+</p>
+
 - **Secure Email Authentication:** Users can create an account and sign in with email and password using Better Auth.
 - **Password Strength Safeguards:** Sign in and sign up forms enforce clear password rules: minimum characters, required digits, and required symbols.
 - **Social Sign In Support:** Google and GitHub authentication flows are included for faster account access.
