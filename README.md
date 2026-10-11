@@ -115,25 +115,25 @@ src/
 
 To run this project locally, follow these steps:
 
-**GitHub Repository:** [BazarDor](#)
+**GitHub Repository:** [BazarDor](https://github.com/SVKSharma/B14-A7-Bazar-Dor)
 
-**HTTPS Clone URL:** `https://github.com/your-username/bazar-dor.git`
+**HTTPS Clone URL:** `https://github.com/SVKSharma/B14-A7-Bazar-Dor.git`
 
-**SSH Clone URL:** `git@github.com:your-username/bazar-dor.git`
+**SSH Clone URL:** `git@github.com:SVKSharma/B14-A7-Bazar-Dor.git`
 
 <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff;">Clone the repository</h3>
 
 Using HTTPS:
 
 ```bash
-git clone https://github.com/your-username/bazar-dor.git
+git clone https://github.com/SVKSharma/B14-A7-Bazar-Dor.git
 cd bazar-dor
 ```
 
 Using SSH:
 
 ```bash
-git clone git@github.com:your-username/bazar-dor.git
+git clone git@github.com:SVKSharma/B14-A7-Bazar-Dor.git
 cd bazar-dor
 ```
 
