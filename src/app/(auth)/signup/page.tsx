@@ -1,23 +1,31 @@
 'use client';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Form, Input, Button } from '@heroui/react';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import PasswordRequirements from '@/components/auth/PasswordRequirements';
 import { clearSocialAuthIntent, setSocialAuthIntent, signIn, signUp } from '@/lib/auth-client';
+import { getAuthPageURL, getSafeCallbackURL } from '@/lib/auth-navigation';
 import { isPasswordStrong, PASSWORD_POLICY } from '@/lib/password-policy';
 import { capitalizeNameWords, MAX_NAME_LENGTH } from '@/lib/user-name';
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackURL = getSafeCallbackURL(`?${searchParams.toString()}`);
+
+  const getReturnUrl = () => getSafeCallbackURL(window.location.search);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +76,7 @@ export default function SignUpPage() {
         },
         onSuccess: () => {
           toast.success('সাইন আপ সফল হয়েছে!', { id: 'signup-success' });
-          router.push('/');
+          router.push(getAuthPageURL('/signin', getReturnUrl()));
         },
         onError: ({ error: authError }) => {
           showError(authError.message || 'সাইন আপ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
@@ -158,32 +166,54 @@ export default function SignUpPage() {
           {/* Password Field */}
           <div className="flex flex-col gap-1">
             <label className="text-xs font-semibold text-gray-700">পাসওয়ার্ড</label>
-            <Input
-              required
-              type="password"
-              minLength={PASSWORD_POLICY.minLength}
-              placeholder="৮+ অক্ষর, ১ সংখ্যা, ১ চিহ্ন"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              variant="secondary"
-              className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
-            />
+            <div className="relative">
+              <Input
+                required
+                type={showPassword ? 'text' : 'password'}
+                minLength={PASSWORD_POLICY.minLength}
+                placeholder="৮+ অক্ষর, ১ সংখ্যা, ১ চিহ্ন"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                variant="secondary"
+                className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 pr-11 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'পাসওয়ার্ড লুকান' : 'পাসওয়ার্ড দেখান'}
+                aria-pressed={showPassword}
+                onClick={() => setShowPassword((visible) => !visible)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 transition-colors hover:text-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#008a45]"
+              >
+                {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+              </button>
+            </div>
             <PasswordRequirements password={password} />
           </div>
 
           {/* Confirm Password Field */}
           <div className="flex flex-col gap-1">
             <label className="text-xs font-semibold text-gray-700">পাসওয়ার্ড নিশ্চিত করুন</label>
-            <Input
-              required
-              type="password"
-              minLength={PASSWORD_POLICY.minLength}
-              placeholder="আবার লিখুন"
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              variant="secondary"
-              className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
-            />
+            <div className="relative">
+              <Input
+                required
+                type={showConfirmPassword ? 'text' : 'password'}
+                minLength={PASSWORD_POLICY.minLength}
+                placeholder="আবার লিখুন"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                variant="secondary"
+                className="h-11 w-full rounded-xl border border-gray-200 bg-[#f8fbf7] px-3 pr-11 text-sm shadow-none outline-none transition-colors placeholder:text-gray-400 focus:border-[#008a45] focus:ring-2 focus:ring-[#008a45]/15"
+              />
+              <button
+                type="button"
+                aria-label={showConfirmPassword ? 'পাসওয়ার্ড লুকান' : 'পাসওয়ার্ড দেখান'}
+                aria-pressed={showConfirmPassword}
+                onClick={() => setShowConfirmPassword((visible) => !visible)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 transition-colors hover:text-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#008a45]"
+              >
+                {showConfirmPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+              </button>
+            </div>
             {confirmPassword && password !== confirmPassword && (
               <p className="text-[11px] font-medium text-red-500">
                 পাসওয়ার্ড দুটি এক নয়।
@@ -233,7 +263,7 @@ export default function SignUpPage() {
         {/* Sign In Redirect Link */}
         <div className="text-center mt-4 text-xs text-gray-600">
           অ্যাকাউন্ট আছে?{' '}
-          <Link href="/signin" className="font-semibold text-[#008a45] hover:underline">
+          <Link href={getAuthPageURL('/signin', callbackURL)} className="font-semibold text-[#008a45] hover:underline">
             সাইন ইন করুন
           </Link>
         </div>
@@ -246,5 +276,13 @@ export default function SignUpPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignUpContent />
+    </Suspense>
   );
 }
