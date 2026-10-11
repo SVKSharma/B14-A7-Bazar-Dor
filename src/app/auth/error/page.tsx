@@ -18,7 +18,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
     ? 'এই ইমেইল দিয়ে অ্যাকাউন্ট আগে থেকেই আছে'
     : 'সাইন ইন করা যায়নি';
   const message = accountAlreadyExists
-    ? 'এই ইমেইল ঠিকানায় আগে থেকেই একটি অ্যাকাউন্ট আছে। আপনার অ্যাকাউন্টে প্রবেশ করতে ইমেইল ও পাসওয়ার্ড দিয়ে সাইন ইন করুন।'
+    ? 'Google বা GitHub-এ ব্যবহৃত ইমেইলটি দিয়ে আগে থেকেই একটি বাজার দর অ্যাকাউন্ট আছে। নিরাপত্তার জন্য অন্য সাইন-ইন পদ্ধতির অ্যাকাউন্ট স্বয়ংক্রিয়ভাবে যুক্ত করা হয় না। আগে যে পদ্ধতিতে অ্যাকাউন্ট খুলেছেন, সেটি দিয়ে সাইন ইন করুন।'
     : 'সাইন ইন করার সময় একটি সমস্যা হয়েছে। আবার চেষ্টা করুন অথবা ইমেইল ও পাসওয়ার্ড দিয়ে সাইন ইন করুন।';
 
   return (
@@ -35,7 +35,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
             href="/signin"
             className="rounded-xl bg-[#008a45] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#007339]"
           >
-            ইমেইল দিয়ে সাইন ইন
+            {accountAlreadyExists ? 'আগের পদ্ধতিতে সাইন ইন করুন' : 'ইমেইল দিয়ে সাইন ইন'}
           </Link>
           <Link
             href="/signup"
