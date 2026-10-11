@@ -2,10 +2,16 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
+const authBaseURL =
+  process.env.VERCEL_ENV === "production"
+    ? "https://b14-a7-bazardor-svk.vercel.app"
+    : process.env.BETTER_AUTH_URL || "http://localhost:3000";
+
 const client = new MongoClient(process.env.BETTER_AUTH_DB_URL as string);
 const db = client.db("bazar-dor");
 
 export const auth = betterAuth({
+  baseURL: authBaseURL,
   database: mongodbAdapter(db, {
     client,
   }),
