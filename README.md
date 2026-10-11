@@ -11,7 +11,7 @@
 
 Browse daily essentials, compare detailed prices, and access protected product insights with a secure account.
 
-**Live Demo:** <a href="https://b14-a7-bazar-dor-svk8.vercel.app/" target="_blank" rel="noopener noreferrer">Open BazarDor</a>
+**Live Demo:** <a href="https://b14-a7-bazardor-svk.vercel.app/" target="_blank" rel="noopener noreferrer">Open BazarDor</a>
 
 </div>
 
